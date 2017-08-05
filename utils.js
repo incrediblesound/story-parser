@@ -1,4 +1,7 @@
-const { IGNORE } = require('./constants')
+const { IGNORE, SPACER } = require('./constants')
+
+const notSpacer = (n) => n !== SPACER
+const notIgnore = (n) => n !== IGNORE
 
 const apply = (mapFunc, parser) => text => {
   const [result, nextText, nextError] = parser(text)
@@ -9,7 +12,7 @@ const apply = (mapFunc, parser) => text => {
 
 const maybe = (parser) => text => {
   const [result, nextText, nextError] = parser(text)
-  if(!result) return IGNORE
+  if(!result) return [IGNORE, text]
   return [result, nextText, nextError]
 }
 
@@ -39,6 +42,8 @@ const trim = (text) => {
 }
 
 module.exports = {
+  notSpacer,
+  notIgnore,
   maybe,
   atLeast,
   apply,

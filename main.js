@@ -1,31 +1,30 @@
-const { apply, atLeast } = require('./utils')
+const { apply, atLeast, maybe } = require('./utils')
 const { IGNORE, SPACER } = require('./constants')
 const arrayOf = require('./types/arrayOf')
 const or = require('./types/or')
 const sequence = require('./types/sequence')
+const playerStats = require('./parsers/playerStats')
+const sections = require('./parsers/section')
 
-const section = require('./parsers/section')
+const SIMPLE = 'SIMPLE'
+const RICH = 'RICH'
 
-const notSpacer = (n) => n !== SPACER
-const notIgnore = (n) => n !== IGNORE
-
-
-const makeSections = (sections) => {
-  return sections
-    .filter(notSpacer)
-    .filter(notIgnore)
-    .map(section => ({
-      id: parseInt(section[1]),
-      text: section[2],
-      options: Array.isArray(section[3]) ? section[3] : 'END'
-    }))
+const makeStory = (parts) => {
+  const story = {}
+  if(parts[0] !== IGNORE){
+    story.type = RICH
+    story.player = parts[0]
+  } else {
+    story.type = SIMPLE
+  }
+  story.pages = parts[1]
+  return story
 }
 
-const compiler = apply(
-  makeSections,
-  atLeast(1, 'page',
-  arrayOf(section())
-  )
+const compiler = apply(makeStory,
+  sequence(
+  maybe(playerStats()),
+  sections())
 )
 
 module.exports = compiler

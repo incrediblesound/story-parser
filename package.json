@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha ./tests/primitives.js"
+    "test": "mocha ./tests/."
   },
   "author": "James Edwards",
   "license": "MIT",

@@ -25,9 +25,13 @@ PAGE 2
 "You are in a bright green field, you made it!"
 (end)`
 
-describe('pages with separators', () => {
-  it('parses into four sections', () => {
-    const [ result, text, error ] = parser(testStory)
-    assert.equal(result.length, 4)
+describe('simple story with four pages', () => {
+  const [ story, text, error ] = parser(testStory)
+  it('has four pages', () => {
+    assert(story.pages)
+    assert.equal(story.pages.length, 4)
+  })
+  it('has a type of SIMPLE', () => {
+    assert.equal(story.type, 'SIMPLE')
   })
 })

@@ -2,8 +2,22 @@ const word = require('../types/word')
 const integer = require('../types/integer')
 const textBlock = require('../types/textBlock')
 const sequence = require('../types/sequence')
+const { apply } = require('../utils')
 
-const playersStats = () => sequence(
+const makePlayer = (parts) => {
+  return {
+    type: 'PLAYER',
+    name: parts[1],
+    health: parts[3],
+    speed: parts[5],
+    attack: parts[7],
+    defense: parts[9],
+    weapon: parts[11],
+    armor: parts[13],
+  }
+}
+
+const playerStats = () => sequence(
   word('PLAYER'), textBlock(),
   word('HEALTH'), integer(),
   word('SPEED'), integer(),
@@ -13,4 +27,4 @@ const playersStats = () => sequence(
   word('ARMOR'), textBlock(),
 )
 
-module.exports = playersStats
+module.exports = () => apply(makePlayer, playerStats())

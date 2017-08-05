@@ -4,11 +4,10 @@ const textBlock = require('../types/textBlock')
 const arrayOf = require('../types/arrayOf')
 const or = require('../types/or')
 const sequence = require('../types/sequence')
-const { apply, atLeast, maybe } = require('../utils')
+const { apply, atLeast, maybe, notSpacer, notIgnore } = require('../utils')
 
-const playersStats = require('./playerStats')
 const challenge = require('./challenge')
-const { SPACER } = require('../constants')
+const { SPACER, IGNORE } = require('../constants')
 
 const makeTargets = (parts) => {
   if(Array.isArray(parts) && parts.length){
@@ -39,9 +38,32 @@ const page = () => sequence(
 )
 
 const section = () => or(
-  playersStats(),
   page(),
-  apply(() => SPACER, atLeast(1, 'spacer', arrayOf(word('-'))))
+  apply(() => SPACER, atLeast(1, 'spacer', arrayOf(word('-')))),
 )
 
-module.exports = section
+const makeSections = (sections) => {
+    return sections
+    .filter(notSpacer)
+    .map(section => {
+      if(section.type === 'CHALLENGE'){
+        return section
+      } else {
+        return {
+          id: parseInt(section[1]),
+          text: section[2],
+          challenge: section[3] !== IGNORE && section[3],
+          options: Array.isArray(section[4]) ? section[3] : 'END'
+        }
+      }
+    })
+}
+
+const sections = () =>
+  apply(
+    makeSections,
+    atLeast(1, 'page',
+    arrayOf(section()))
+  )
+
+module.exports = sections

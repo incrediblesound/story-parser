@@ -5,7 +5,6 @@ const arrayOf = (parser) => (text) => {
   do {
     let [nextResult, nextText, nextError] = parser(text)
     error = nextError
-
     if(nextResult){
       result.push(nextResult)
     } else {
