@@ -37,10 +37,10 @@ PAGE 2
 "You are in a bright green field, you made it!"
 (end)`
 
-describe('pages with separators', () => {
+describe('main parser', () => {
   it('parses a rich story', () => {
-    const [ result, text, error ] = parser(testStory)
-    assert.equal(result.type, 'RICH')
-    assert.equal(result.pages.length, 4)
+    const [ story, text, error ] = parser(testStory)
+    assert.equal(story.type, 'RICH')
+    assert.equal(story.pages.length, 4)
   })
 })

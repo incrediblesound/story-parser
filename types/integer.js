@@ -9,7 +9,7 @@ const integer = () => text => {
   if (!x) {
     return [false, text, 'Expected a number']
   }
-  let num = text.substring(0, x)
+  let num = parseInt(text.substring(0, x))
   text = text.substring(x)
   return [num, text]
 }

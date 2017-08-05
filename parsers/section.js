@@ -13,7 +13,7 @@ const makeTargets = (parts) => {
   if(Array.isArray(parts) && parts.length){
     return parts.map(part => {
       return {
-        target: parseInt(part[1]),
+        target: part[1],
         text: part[2]
       }
     })
@@ -50,10 +50,10 @@ const makeSections = (sections) => {
         return section
       } else {
         return {
-          id: parseInt(section[1]),
+          id: section[1],
           text: section[2],
           challenge: section[3] !== IGNORE && section[3],
-          options: Array.isArray(section[4]) ? section[3] : 'END'
+          options: Array.isArray(section[4]) ? section[4] : 'END'
         }
       }
     })

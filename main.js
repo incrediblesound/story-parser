@@ -23,8 +23,9 @@ const makeStory = (parts) => {
 
 const compiler = apply(makeStory,
   sequence(
-  maybe(playerStats()),
-  sections())
+    maybe(playerStats()),
+    sections()
+  )
 )
 
 module.exports = compiler
