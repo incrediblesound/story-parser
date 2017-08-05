@@ -1,0 +1,39 @@
+
+const textExample =
+`
+PLAYER "hero"
+HEALTH 10 SPEED 5 ATTACK 3 DEFENSE 7
+WEAPON "sword"
+ARMOR "leather"
+--------------------------------------
+SECTION 0
+"You are in a room, there is a door to the left and a door to the right.
+It is a dark room."
+OPTION 1
+"Take the door on the left"
+OPTION 2
+"Take the door on the right"
+OPTION 3
+"Take the door at the end of the hall"
+--------------------------------------
+SECTION 3
+"There is a skeleton in this room!"
+
+CHALLENGE "skeleton"
+HEALTH 5 SPEED 3 ATTACK 1 DEFENSE 4
+WEAPON "dagger"
+
+OPTION 0
+"Go back"
+(end)
+--------------------------------------
+SECTION 1
+"You are in an empty room."
+OPTION 0
+"Go back"
+--------------------------------------
+SECTION 2
+"You are in a bright green field, you made it!"
+(end)`
+
+export default textExample

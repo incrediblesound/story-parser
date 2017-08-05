@@ -1,0 +1,17 @@
+{
+  "name": "story-parser",
+  "version": "1.0.0",
+  "description": "A parser for interactive stories.",
+  "main": "main.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "mocha ./tests/primitives.js"
+  },
+  "author": "James Edwards",
+  "license": "MIT",
+  "dependencies": {
+    "mocha": "3.5.0"
+  }
+}
