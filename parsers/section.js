@@ -52,7 +52,7 @@ const makeSections = (sections) => {
         return {
           id: section[1],
           text: section[2],
-          challenge: section[3] !== IGNORE && section[3],
+          challenge: section[3] !== IGNORE ? section[3] : undefined,
           options: Array.isArray(section[4]) ? section[4] : 'END'
         }
       }
