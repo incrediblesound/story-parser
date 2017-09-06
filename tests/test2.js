@@ -4,7 +4,7 @@ const assert = require('assert')
 const testStory =
 `
 PLAYER "hero"
-HEALTH 10 SPEED 5 ATTACK 3 DEFENSE 7
+HEALTH 10 SPEED 3 ATTACK 3 DEFENSE 4
 WEAPON "sword"
 ARMOR "leather"
 --------------------------------------
@@ -24,6 +24,12 @@ PAGE 3
 CHALLENGE "skeleton"
 HEALTH 5 SPEED 3 ATTACK 1 DEFENSE 4
 WEAPON "dagger"
+
+REWARD TYPE "weapon" NAME "magic sword"
+ATTACK 4 SPEED 6
+
+REWARD TYPE "armor" NAME "plate mail"
+DEFENSE 8
 
 OPTION 0
 "Go back"

@@ -5,16 +5,18 @@ const arrayOf = require('../types/arrayOf')
 const or = require('../types/or')
 const sequence = require('../types/sequence')
 const { apply, atLeast, maybe, notSpacer, notIgnore } = require('../utils')
+const { SPACER, IGNORE } = require('../constants')
 
 const challenge = require('./challenge')
-const { SPACER, IGNORE } = require('../constants')
+const reward = require('./reward')
 
 const makeTargets = (parts) => {
   if(Array.isArray(parts) && parts.length){
     return parts.map(part => {
       return {
         target: part[1],
-        text: part[2]
+        text: part[2],
+        lock: part[3] === IGNORE ? false : part[3][1]
       }
     })
   }
@@ -23,14 +25,17 @@ const makeTargets = (parts) => {
 const option = () => sequence(
   word('OPTION'),
   integer(),
-  textBlock()
+  textBlock(),
+  maybe(sequence(
+    word("LOCK"),
+    textBlock()
+  ))
 )
 
 const page = () => sequence(
-  word('PAGE'),
-  integer(),
-  textBlock(),
+  word('PAGE'), integer(), textBlock(),
   maybe(challenge()),
+  maybe(reward()),
   or(
     word('(end)'),
     apply(makeTargets, atLeast(1, 'option', arrayOf(option())))
@@ -53,7 +58,8 @@ const makeSections = (sections) => {
           id: section[1],
           text: section[2],
           challenge: section[3] !== IGNORE ? section[3] : undefined,
-          options: Array.isArray(section[4]) ? section[4] : 'END'
+          rewards: section[4] !== IGNORE ? section[4] : [],
+          options: Array.isArray(section[5]) ? section[5] : 'END'
         }
       }
     })

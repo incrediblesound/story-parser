@@ -9,10 +9,8 @@ const makePlayer = (parts) => {
     type: 'PLAYER',
     name: parts[1],
     health: parts[3],
-    speed: parts[5],
-    attack: parts[7],
     defense: parts[9],
-    weapon: parts[11],
+    weapons: [ { name: parts[11], speed: parts[5], attack: parts[7] } ],
     armor: parts[13],
   }
 }
