@@ -1,31 +1,45 @@
 const { IGNORE, SPACER } = require('./constants')
+const { ERROR_DIDNT_BEGIN, ERROR_PARSER_FAILED } = require('./constants')
 
 const notSpacer = (n) => n !== SPACER
 const notIgnore = (n) => n !== IGNORE
 
 const apply = (mapFunc, parser) => text => {
-  const [result, nextText, nextError] = parser(text)
-  if(!result) return [result, text, nextError]
-
-  return [mapFunc(result), nextText]
+  const parserResult = parser(text)
+  if (parserResult.result === false && parserResult.error) {
+    return { result: false, text, error: parserResult.error, errorType: parserResult.errorType }
+  } else {
+    parserResult.result = mapFunc(parserResult.result)
+    return parserResult
+  }
 }
 
 const maybe = (parser) => text => {
-  const [result, nextText, nextError] = parser(text)
-  if(!result) return [IGNORE, text]
-  return [result, nextText, nextError]
+  const parserResult = parser(text)
+  if (parserResult.result === false && parserResult.errorType === ERROR_PARSER_FAILED) {
+    return { result: false, text, error: parserResult.error, errorType: parserResult.errorType }
+  } else if (parserResult.result === false && parserResult.errorType === ERROR_DIDNT_BEGIN) {
+    return { result: IGNORE, text }
+  } else {
+    return parserResult
+  }
 }
 
 const atLeast = (num, type, parser) => text => {
-  let [nextResult, nextText, nextError] = parser(text)
-  if(nextResult.length < num){
-    if(nextError){
-      return [false, text, nextError]
+  let parserResult = parser(text)
+  const length = parserResult.result.length
+  if(length < num){
+    if(parserResult.error){
+      return { result: false, text, error: parserResult.error, errorType: parserResult.errorType }
     } else {
-      return [false, text, `Expected at least ${num} ${type} but found ${nextResult.length}`]
+      return {
+        result: false,
+        text,
+        error: `Expected at least ${num} ${type} but found ${length}`,
+        errorType: length ? ERROR_PARSER_FAILED : ERROR_DIDNT_BEGIN }
     }
   } else {
-    return [nextResult, nextText]
+    return parserResult
   }
 }
 

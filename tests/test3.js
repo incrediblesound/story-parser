@@ -24,7 +24,8 @@ PAGE 2
 (end)`
 
 describe('simple story with locked room', () => {
-  const [ story, text, error ] = parser(testStory)
+  const parserResult = parser(testStory)
+  const story = parserResult.result
   it('has four pages', () => {
     assert(story.pages)
     assert.equal(story.pages.length, 4)

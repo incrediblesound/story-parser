@@ -21,11 +21,11 @@ const makeStory = (parts) => {
   return story
 }
 
-const compiler = apply(makeStory,
+const parser = apply(makeStory,
   sequence(
     maybe(playerStats()),
     sections()
   )
 )
 
-module.exports = compiler
+module.exports = parser

@@ -1,4 +1,5 @@
 const { trim } = require('../utils')
+const { ERROR_PARSER_FAILED } = require('../constants')
 
 const integer = () => text => {
   text = trim(text)
@@ -7,11 +8,11 @@ const integer = () => text => {
     x++
   }
   if (!x) {
-    return [false, text, 'Expected a number']
+    return { result: false, text, error: 'Expected a number', errorType: ERROR_PARSER_FAILED }
   }
   let num = parseInt(text.substring(0, x))
   text = text.substring(x)
-  return [num, text]
+  return { result: num, text }
 }
 
 module.exports = integer

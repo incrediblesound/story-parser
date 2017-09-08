@@ -3,7 +3,7 @@ const or = (...parsers) => text => {
 
   for(let i = 0; i < parsers.length; i++){
     nextResult = parsers[i](text)
-    if(nextResult[0]) return nextResult
+    if(nextResult.result) return nextResult
   }
 
   return nextResult

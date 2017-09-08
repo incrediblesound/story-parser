@@ -43,8 +43,8 @@ const page = () => sequence(
 )
 
 const section = () => or(
-  page(),
   apply(() => SPACER, atLeast(1, 'spacer', arrayOf(word('-')))),
+  page(),
 )
 
 const makeSections = (sections) => {
