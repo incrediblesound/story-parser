@@ -35,6 +35,7 @@ const option = () => sequence(
 const page = () => sequence(
   word('PAGE'), integer(),
   arrayOf(textBlock()),
+  maybe(word('RECOVER_HEALTH')),
   maybe(challenge()),
   maybe(reward()),
   or(
@@ -58,9 +59,10 @@ const makeSections = (sections) => {
         return {
           id: section[1],
           text: section[2],
-          challenge: section[3] !== IGNORE ? section[3] : undefined,
-          rewards: section[4] !== IGNORE ? section[4] : [],
-          options: Array.isArray(section[5]) ? section[5] : 'END'
+          recoverHealth: section[3] === true,
+          challenge: section[4] !== IGNORE ? section[4] : undefined,
+          rewards: section[5] !== IGNORE ? section[5] : [],
+          options: Array.isArray(section[6]) ? section[6] : 'END'
         }
       }
     })

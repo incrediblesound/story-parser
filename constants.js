@@ -7,10 +7,15 @@ const ERROR_PARSER_FAILED = 'ERROR_PARSER_FAILED'
 
 const IGNORE = 'IGNORE'
 
+const WORD = 'WORD'
+const INTEGER = 'INTEGER'
+
 module.exports = {
   SPACER,
   ERROR,
   ERROR_DIDNT_BEGIN,
   ERROR_PARSER_FAILED,
   IGNORE,
+  WORD,
+  INTEGER,
 }

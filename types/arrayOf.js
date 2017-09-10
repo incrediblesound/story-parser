@@ -19,12 +19,7 @@ const arrayOf = (parser) => (text) => {
     next = parserResult.result
     counter++
   } while(next)
-
-  if (errorType === ERROR_PARSER_FAILED) {
-    return { result: false, text, error, errorType: ERROR_PARSER_FAILED }
-  } else {
     return { result, text }
-  }
 }
 
 module.exports = arrayOf

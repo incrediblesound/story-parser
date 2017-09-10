@@ -16,6 +16,7 @@ OPTION 0 "Go back"
 --------------------------------------
 PAGE 1
 "You are in an empty room."
+RECOVER_HEALTH
 OPTION 0
 "Go back"
 --------------------------------------
@@ -26,6 +27,7 @@ PAGE 2
 describe('simple story with locked room', () => {
   const parserResult = parser(testStory)
   const story = parserResult.result
+  console.log(story)
   it('has four pages', () => {
     assert(story.pages)
     assert.equal(story.pages.length, 4)

@@ -1,5 +1,5 @@
 const { IGNORE, SPACER } = require('./constants')
-const { ERROR_DIDNT_BEGIN, ERROR_PARSER_FAILED } = require('./constants')
+const { ERROR_DIDNT_BEGIN, ERROR_PARSER_FAILED, WORD, INTEGER } = require('./constants')
 
 const notSpacer = (n) => n !== SPACER
 const notIgnore = (n) => n !== IGNORE
@@ -16,7 +16,9 @@ const apply = (mapFunc, parser) => text => {
 
 const maybe = (parser) => text => {
   const parserResult = parser(text)
-  if (parserResult.result === false && parserResult.errorType === ERROR_PARSER_FAILED) {
+  if (parserResult.result === false && (parserResult.parser === WORD || parserResult.parser === INTEGER)) {
+    return { result: IGNORE, text }
+  } else if (parserResult.result === false && parserResult.errorType === ERROR_PARSER_FAILED) {
     return { result: false, text, error: parserResult.error, errorType: parserResult.errorType }
   } else if (parserResult.result === false && parserResult.errorType === ERROR_DIDNT_BEGIN) {
     return { result: IGNORE, text }
