@@ -33,7 +33,8 @@ const option = () => sequence(
 )
 
 const page = () => sequence(
-  word('PAGE'), integer(), textBlock(),
+  word('PAGE'), integer(),
+  arrayOf(textBlock()),
   maybe(challenge()),
   maybe(reward()),
   or(
