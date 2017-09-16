@@ -24,8 +24,8 @@ describe('word', () => {
   it('parses words', () => {
     const result1 = word('hello')(test1)
     const result2 = word('hey')(test2)
-    assert.equal(result1.result, true)
-    assert.equal(result2.result, true)
+    assert.equal(result1.result, 'hello')
+    assert.equal(result2.result, 'hey')
   })
   it('throws a descriptive error', () => {
     const error1 = word('hello')(test3)

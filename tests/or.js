@@ -22,7 +22,7 @@ describe('or', () => {
     assert.equal(result1.result, '12')
 
     const result2 = parser(test2)
-    assert.equal(result2.result, true)
+    assert.equal(result2.result, 'hey')
 
     const result3 = parser(test3)
     assert.equal(result3.result, false)

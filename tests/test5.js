@@ -38,7 +38,6 @@ ATTACK 5 SPEED 5
 describe('rich story with combat and rewards text', () => {
   const parserResult = parser(testStory)
   const story = parserResult.result
-  console.log(JSON.stringify(story))
   it('has three pages', () => {
     assert(story.pages.length === 3)
   })

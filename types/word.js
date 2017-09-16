@@ -15,7 +15,7 @@ const word = (wordText) => text => {
     }
   }
   text = text.substring(wordText.length)
-  return { result: true, text }
+  return { result: wordText, text }
 }
 
 module.exports = word

@@ -13,11 +13,16 @@ const reward = require('./reward')
 const makeTargets = (parts) => {
   if(Array.isArray(parts) && parts.length){
     return parts.map(part => {
-      return {
+      const option = {
         target: part[1],
         text: part[2],
-        lock: part[3] === IGNORE ? false : part[3][1]
       }
+      if(part[3] !== IGNORE && part[3][0] === 'LOCK'){
+        option.lock = part[3][1]
+      } else if(part[4] !== IGNORE && part[4][0] === 'IF'){
+        option.condition = part[4][1]
+      }
+      return option
     })
   }
 }
@@ -28,6 +33,10 @@ const option = () => sequence(
   textBlock(),
   maybe(sequence(
     word("LOCK"),
+    textBlock()
+  )),
+  maybe(sequence(
+    word("IF"),
     textBlock()
   ))
 )
