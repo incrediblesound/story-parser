@@ -11,7 +11,7 @@ OPTION 3 "Take the door at the end of the hall"
 --------------------------------------
 PAGE 3
 "There is a silver key in this room!"
-REWARD TYPE "item" NAME "silver key"
+ITEM TYPE "key" NAME "silver key"
 OPTION 0 "Go back"
 --------------------------------------
 PAGE 1

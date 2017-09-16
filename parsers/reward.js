@@ -23,7 +23,8 @@ const makeReward = (rewards) => {
             name: parts[4],
             defense: parts[6],
           }
-        case "item":
+        case "key":
+        case "hidden":
           return {
             type,
             name: parts[4],
@@ -33,28 +34,28 @@ const makeReward = (rewards) => {
 }
 
 /*
-REWARD TYPE "weapon" NAME "magic sword"
+ITEM TYPE "weapon" NAME "magic sword"
 ATTACK 4 SPEED 6
 
-REWARD TYPE "armor" NAME "plate mail"
+ITEM TYPE "armor" NAME "plate mail"
 DEFENSE 8
 */
 
 const reward = () => atLeast(1, 'reward', arrayOf(
   or(
     sequence(
-      word('REWARD'), word('TYPE'), textBlock(),
+      word('ITEM'), word('TYPE'), textBlock(),
       word('NAME'), textBlock(),
       word('ATTACK'), integer(),
       word('SPEED'), integer(),
     ),
     sequence(
-      word('REWARD'), word('TYPE'), textBlock(),
+      word('ITEM'), word('TYPE'), textBlock(),
       word('NAME'), textBlock(),
       word('DEFENSE'), integer(),
     ),
     sequence(
-      word('REWARD'), word('TYPE'), textBlock(),
+      word('ITEM'), word('TYPE'), textBlock(),
       word('NAME'), textBlock(),
     )
   ))

@@ -25,10 +25,10 @@ CHALLENGE "skeleton"
 HEALTH 5 SPEED 3 ATTACK 1 DEFENSE 4
 WEAPON "dagger"
 
-REWARD TYPE "weapon" NAME "magic sword"
+ITEM TYPE "weapon" NAME "magic sword"
 ATTACK 4 SPEED 6
 
-REWARD TYPE "armor" NAME "plate mail"
+ITEM TYPE "armor" NAME "plate mail"
 DEFENSE 8
 
 OPTION 0
