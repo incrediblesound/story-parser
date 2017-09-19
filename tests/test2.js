@@ -23,7 +23,7 @@ PAGE 3
 
 CHALLENGE "skeleton"
 HEALTH 5 SPEED 3 ATTACK 1 DEFENSE 4
-WEAPON "dagger"
+WEAPON "dagger" DAMAGE 3
 
 ITEM TYPE "weapon" NAME "magic sword"
 DAMAGE 4 SPEED 6

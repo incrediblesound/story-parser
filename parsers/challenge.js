@@ -13,6 +13,7 @@ const makeChallenge = (parts) => {
     attack: parts[7],
     defense: parts[9],
     weapon: parts[11],
+    damage: parts[13]
   }
 }
 
@@ -23,6 +24,7 @@ const challenge = () => sequence(
   word('ATTACK'), integer(),
   word('DEFENSE'), integer(),
   word('WEAPON'), textBlock(),
+  word('DAMAGE'), integer(),
 )
 
 module.exports = () => apply(makeChallenge, challenge())
