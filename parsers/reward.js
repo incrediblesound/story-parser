@@ -12,14 +12,14 @@ const makeReward = (rewards) => {
     switch (parts[2]) {
       case '"weapon"':
         return {
-          type,
+          type: 'weapon',
           name: parts[4],
           damage: parts[6],
           speed: parts[8],
         }
         case '"armor"':
           return {
-            type,
+            type: 'armor',
             name: parts[4],
             defense: parts[6],
           }
