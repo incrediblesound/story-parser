@@ -10,14 +10,14 @@ const makeReward = (rewards) => {
   return rewards.map(parts => {
     const type = parts[2]
     switch (parts[2]) {
-      case "weapon":
+      case '"weapon"':
         return {
           type,
           name: parts[4],
           damage: parts[6],
           speed: parts[8],
         }
-        case "armor":
+        case '"armor"':
           return {
             type,
             name: parts[4],
@@ -39,7 +39,7 @@ ITEM TYPE "weapon" NAME "sword" DAMAGE 4 SPEED 3
 ITEM TYPE "armor" NAME "leather" DEFENSE 1
 */
 
-const reward = () => atLeast(1, 'reward', arrayOf(
+const reward = () => arrayOf(
   or(
     sequence(
       word('ITEM'), word('TYPE'), word('"weapon"'),
@@ -56,7 +56,7 @@ const reward = () => atLeast(1, 'reward', arrayOf(
       word('ITEM'), word('TYPE'), textBlock(),
       word('NAME'), textBlock(),
     )
-  ))
+  )
 )
 
 

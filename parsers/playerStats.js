@@ -22,7 +22,7 @@ const playerStats = () => sequence(
   word('HEALTH'), integer(),
   word('ATTACK'), integer(),
   word('DEFENSE'), integer(),
-  arrayOf(reward())
+  reward(),
 )
 
 module.exports = () => apply(makePlayer, playerStats())

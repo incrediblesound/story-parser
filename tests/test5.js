@@ -37,7 +37,6 @@ DAMAGE 5 SPEED 5
 
 describe('rich story with combat and rewards text', () => {
   const parserResult = parser(testStory)
-  console.log(parserResult)
   const story = parserResult.result
   it('has three pages', () => {
     assert(story.pages.length === 3)
