@@ -27,7 +27,6 @@ PAGE 2
 describe('simple story with locked room', () => {
   const parserResult = parser(testStory)
   const story = parserResult.result
-  console.log(JSON.stringify(story))
 
   it('has four pages', () => {
     assert(story.pages)

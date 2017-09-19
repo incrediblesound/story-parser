@@ -4,9 +4,9 @@ const assert = require('assert')
 const testStory =
 `
 PLAYER "hero"
-HEALTH 10 SPEED 3 ATTACK 3 DEFENSE 4
-WEAPON "sword"
-ARMOR "leather"
+HEALTH 10 ATTACK 3 DEFENSE 2
+ITEM TYPE "weapon" NAME "sword" DAMAGE 4 SPEED 3
+ITEM TYPE "armor" NAME "leather" DEFENSE 1
 --------------------------------------
 PAGE 0
 "You are in a room, there is a door to the left and a door to the right.
@@ -26,10 +26,10 @@ HEALTH 5 SPEED 3 ATTACK 1 DEFENSE 4
 WEAPON "dagger"
 
 ITEM TYPE "weapon" NAME "magic sword"
-ATTACK 4 SPEED 6
+DAMAGE 4 SPEED 6
 
 ITEM TYPE "armor" NAME "plate mail"
-DEFENSE 8
+DEFENSE 5
 
 OPTION 0
 "Go back"

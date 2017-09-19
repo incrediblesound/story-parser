@@ -3,9 +3,9 @@ const assert = require('assert')
 
 const testStory = `
 PLAYER "hero"
-HEALTH 10 SPEED 3 ATTACK 3 DEFENSE 4
-WEAPON "sword"
-ARMOR "leather"
+HEALTH 10 ATTACK 3 DEFENSE 2
+ITEM TYPE "weapon" NAME "sword" DAMAGE 4 SPEED 3
+ITEM TYPE "armor" NAME "leather" DEFENSE 1
 --------------------------------------
 PAGE 0
 "Take the gold to buy the armor"
@@ -30,13 +30,14 @@ HEALTH 5 SPEED 1 ATTACK 5 DEFENSE 4
 WEAPON "fire"
 
 ITEM TYPE "weapon" NAME "magic sword"
-ATTACK 5 SPEED 5
+DAMAGE 5 SPEED 5
 
 (end)
 `
 
 describe('rich story with combat and rewards text', () => {
   const parserResult = parser(testStory)
+  console.log(parserResult)
   const story = parserResult.result
   it('has three pages', () => {
     assert(story.pages.length === 3)
