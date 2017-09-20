@@ -8,17 +8,19 @@ const makeChallenge = (parts) => {
   return {
     type: 'CHALLENGE',
     name: parts[1],
-    health: parts[3],
-    speed: parts[5],
-    attack: parts[7],
-    defense: parts[9],
-    weapon: parts[11],
-    damage: parts[13]
+    text: parts[3],
+    health: parts[5],
+    speed: parts[7],
+    attack: parts[9],
+    defense: parts[11],
+    weapon: parts[13],
+    damage: parts[15]
   }
 }
 
 const challenge = () => sequence(
   word('CHALLENGE'), textBlock(),
+  word('TEXT'), textBlock(),
   word('HEALTH'), integer(),
   word('SPEED'), integer(),
   word('ATTACK'), integer(),

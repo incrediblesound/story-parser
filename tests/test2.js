@@ -19,9 +19,10 @@ OPTION 3
 "Take the door at the end of the hall"
 --------------------------------------
 PAGE 3
-"There is a skeleton in this room!"
+"The skeleton's bones lie on the floor."
 
 CHALLENGE "skeleton"
+TEXT "A skeleton attacks you!"
 HEALTH 5 SPEED 3 ATTACK 1 DEFENSE 4
 WEAPON "dagger" DAMAGE 3
 

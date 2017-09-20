@@ -26,6 +26,7 @@ PAGE 2
 "You have defeated the dragon!"
 
 CHALLENGE "dragon"
+TEXT "There is a dragon in this room!"
 HEALTH 5 SPEED 1 ATTACK 5 DEFENSE 4
 WEAPON "fire" DAMAGE 5
 
