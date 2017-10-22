@@ -27,6 +27,7 @@ const makeReward = (rewards) => {
           }
         case "key":
         case "hidden":
+        case "drop":
           return {
             type,
             name: parts[4],

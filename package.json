@@ -1,6 +1,6 @@
 {
   "name": "story-parser",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "A parser for interactive stories.",
   "main": "main.js",
   "directories": {

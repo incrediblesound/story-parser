@@ -27,6 +27,25 @@ const makeTargets = (parts) => {
   }
 }
 
+const makeSections = (sections) => {
+    return sections
+    .filter(notSpacer)
+    .map(section => {
+      if(section.type === 'CHALLENGE'){
+        return section
+      } else {
+        return {
+          id: section[1],
+          text: section[2],
+          recoverHealth: section[3] === true,
+          challenge: section[4] !== IGNORE ? section[4] : false,
+          rewards: section[5],
+          options: Array.isArray(section[6]) ? section[6] : 'END'
+        }
+      }
+    })
+}
+
 const option = () => sequence(
   word('OPTION'),
   integer(),
@@ -58,24 +77,6 @@ const section = () => or(
   page(),
 )
 
-const makeSections = (sections) => {
-    return sections
-    .filter(notSpacer)
-    .map(section => {
-      if(section.type === 'CHALLENGE'){
-        return section
-      } else {
-        return {
-          id: section[1],
-          text: section[2],
-          recoverHealth: section[3] === true,
-          challenge: section[4] !== IGNORE ? section[4] : false,
-          rewards: section[5],
-          options: Array.isArray(section[6]) ? section[6] : 'END'
-        }
-      }
-    })
-}
 
 const sections = () =>
   apply(
