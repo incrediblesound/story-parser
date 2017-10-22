@@ -8,7 +8,7 @@ const { apply, atLeast, maybe, notSpacer, notIgnore } = require('../utils')
 const { SPACER, IGNORE } = require('../constants')
 
 const challenge = require('./challenge')
-const reward = require('./reward')
+const { reward } = require('./reward')
 
 const makeTargets = (parts) => {
   if(Array.isArray(parts) && parts.length){

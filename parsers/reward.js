@@ -6,6 +6,8 @@ const or = require('../types/or')
 const arrayOf = require('../types/arrayOf')
 const { apply, atLeast } = require('../utils')
 
+module.exports = {}
+
 const makeReward = (rewards) => {
   return rewards.map(parts => {
     const type = parts[2]
@@ -31,6 +33,13 @@ const makeReward = (rewards) => {
           }
       }
   })
+}
+
+const makeItemDrop = (parts) => {
+  return {
+    key: parts[1],
+    items: makeReward(parts[2]),
+  }
 }
 
 /*
@@ -59,6 +68,10 @@ const reward = () => arrayOf(
   )
 )
 
+const itemDrop = () => sequence(
+  word('ITEM_DROP'), textBlock(),
+  atLeast(2, 'items', reward())
+)
 
-
-module.exports = () => apply(makeReward, reward())
+module.exports.itemDrop = () => apply(makeItemDrop, itemDrop());
+module.exports.reward = () => apply(makeReward, reward())

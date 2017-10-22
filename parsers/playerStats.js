@@ -2,7 +2,7 @@ const word = require('../types/word')
 const integer = require('../types/integer')
 const textBlock = require('../types/textBlock')
 const sequence = require('../types/sequence')
-const reward = require('./reward')
+const { reward } = require('./reward')
 const arrayOf = require('../types/arrayOf')
 const { apply } = require('../utils')
 
