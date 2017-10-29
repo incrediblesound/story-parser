@@ -25,6 +25,12 @@ const makeReward = (rewards) => {
             name: parts[4],
             defense: parts[6],
           }
+        case '"health"':
+          return {
+            type: 'health',
+            name: parts[4],
+            recovery: parts[6],
+          }
         case "key":
         case "hidden":
         case "drop":
@@ -61,6 +67,11 @@ const reward = () => arrayOf(
       word('ITEM'), word('TYPE'), word('"armor"'),
       word('NAME'), textBlock(),
       word('DEFENSE'), integer(),
+    ),
+    sequence(
+      word('ITEM'), word('TYPE'), word('"health"'),
+      word('NAME'), textBlock(),
+      word('RECOVERY'), integer(),
     ),
     sequence(
       word('ITEM'), word('TYPE'), textBlock(),
