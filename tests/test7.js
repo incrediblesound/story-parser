@@ -35,6 +35,7 @@ describe('main parser', () => {
   it('parses a rich story', () => {
     const parserResult = parser(testStory)
     const story = parserResult.result
+
     assert.equal(story.type, 'RICH')
     assert.equal(story.pages.length, 1)
     assert(story.drops.weapons)

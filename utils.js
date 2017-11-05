@@ -7,7 +7,12 @@ const notIgnore = (n) => n !== IGNORE
 const apply = (mapFunc, parser) => text => {
   const parserResult = parser(text)
   if (parserResult.result === false && parserResult.error) {
-    return { result: false, text, error: parserResult.error, errorType: parserResult.errorType }
+    return {
+      result: false,
+      text: parserResult.text,
+      error: parserResult.error,
+      errorType: parserResult.errorType
+    }
   } else {
     parserResult.result = mapFunc(parserResult.result)
     return parserResult
@@ -17,9 +22,9 @@ const apply = (mapFunc, parser) => text => {
 const maybe = (parser) => text => {
   const parserResult = parser(text)
   if (parserResult.result === false && (parserResult.parser === WORD || parserResult.parser === INTEGER)) {
-    return { result: IGNORE, text }
+    return { result: IGNORE, text: parserResult.text }
   } else if (parserResult.result === false && parserResult.errorType === ERROR_PARSER_FAILED) {
-    return { result: false, text, error: parserResult.error, errorType: parserResult.errorType }
+    return { result: false, text: parserResult.text, error: parserResult.error, errorType: parserResult.errorType }
   } else if (parserResult.result === false && parserResult.errorType === ERROR_DIDNT_BEGIN) {
     return { result: IGNORE, text }
   } else {
@@ -32,7 +37,12 @@ const atLeast = (num, type, parser) => text => {
   const length = parserResult.result.length
   if(length < num){
     if(parserResult.error){
-      return { result: false, text, error: parserResult.error, errorType: parserResult.errorType }
+      return {
+        result: false,
+        text: parserResult.text,
+        error: parserResult.error,
+        errorType: parserResult.errorType
+      }
     } else {
       return {
         result: false,

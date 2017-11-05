@@ -7,7 +7,7 @@ const word = (wordText) => text => {
     if (wordText[i] !== text[i]) {
       return {
         result: false,
-        text,
+        text: text.substring(i),
         error: `Expected the word "${wordText}"`,
         errorType: ERROR_PARSER_FAILED,
         parser: WORD

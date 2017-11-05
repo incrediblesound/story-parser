@@ -7,13 +7,13 @@ const sequence = (...parsers) => text => {
     if (parserResult.result === false && !i) {
       return {
         result: false,
-        text,
+        text: parserResult.text,
         error: `Sequence didnt begin, failed with: ${parserResult.error}`,
         errorType: ERROR_DIDNT_BEGIN }
     } else if (parserResult.result === false && i) {
       return {
         result: false,
-        text,
+        text: parserResult.text,
         error: parserResult.error,
         errorType: ERROR_PARSER_FAILED }
     } else {

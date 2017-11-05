@@ -13,6 +13,7 @@ const arrayOf = (parser) => (text) => {
     if(parserResult.result !== false){
       result.push(parserResult.result)
     } else {
+      text = parserResult.text
       break
     }
     text = parserResult.text
