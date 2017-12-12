@@ -62,18 +62,18 @@ const option = () => sequence(
 
 const page = () => sequence(
   word('PAGE'), integer(),
-  arrayOf(textBlock()),
+  arrayOf(textBlock(), 'page text'),
   maybe(word('RECOVER_HEALTH')),
   maybe(challenge()),
   reward(),
   or(
     word('(end)'),
-    apply(makeTargets, atLeast(1, 'option', arrayOf(option())))
+    apply(makeTargets, atLeast(1, 'option', arrayOf(option(), 'options')))
   ),
 )
 
 const section = () => or(
-  apply(() => SPACER, atLeast(1, 'spacer', arrayOf(word('-')))),
+  apply(() => SPACER, atLeast(1, 'spacer', arrayOf(word('-'), 'dashes'))),
   page(),
 )
 
@@ -82,7 +82,7 @@ const sections = () =>
   apply(
     makeSections,
     atLeast(1, 'page',
-    arrayOf(section()))
+    arrayOf(section(), 'sections'))
   )
 
 module.exports = sections

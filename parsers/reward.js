@@ -77,7 +77,7 @@ const reward = () => arrayOf(
       word('ITEM'), word('TYPE'), textBlock(),
       word('NAME'), textBlock(),
     )
-  )
+  ), 'reward'
 )
 
 const itemDrop = () => sequence(

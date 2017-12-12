@@ -31,7 +31,7 @@ const makeStory = (parts) => {
 
 const parser = apply(makeStory,
   sequence(
-    maybe(atLeast(1, 'item drop', arrayOf(itemDrop()))),
+    maybe(atLeast(1, 'item drop', arrayOf(itemDrop(), 'item drop'))),
     maybe(playerStats()),
     sections()
   )

@@ -25,4 +25,4 @@ const playerStats = () => sequence(
   reward(),
 )
 
-module.exports = () => apply(makePlayer, playerStats())
+module.exports = () => apply(makePlayer, playerStats(), 'stats')

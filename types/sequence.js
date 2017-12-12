@@ -1,4 +1,4 @@
-const { ERROR_DIDNT_BEGIN, ERROR_PARSER_FAILED } = require('../constants')
+const { ERROR_DIDNT_BEGIN, ERROR_PARSER_FAILED, IGNORE } = require('../constants')
 
 const sequence = (...parsers) => text => {
   let result = []
@@ -7,7 +7,7 @@ const sequence = (...parsers) => text => {
     if (parserResult.result === false && !i) {
       return {
         result: false,
-        text: parserResult.text,
+        text: text,
         error: `Sequence didnt begin, failed with: ${parserResult.error}`,
         errorType: ERROR_DIDNT_BEGIN }
     } else if (parserResult.result === false && i) {

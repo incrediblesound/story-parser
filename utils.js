@@ -4,7 +4,7 @@ const { ERROR_DIDNT_BEGIN, ERROR_PARSER_FAILED, WORD, INTEGER } = require('./con
 const notSpacer = (n) => n !== SPACER
 const notIgnore = (n) => n !== IGNORE
 
-const apply = (mapFunc, parser) => text => {
+const apply = (mapFunc, parser, label) => text => {
   const parserResult = parser(text)
   if (parserResult.result === false && parserResult.error) {
     return {
@@ -26,7 +26,7 @@ const maybe = (parser) => text => {
   } else if (parserResult.result === false && parserResult.errorType === ERROR_PARSER_FAILED) {
     return { result: false, text: parserResult.text, error: parserResult.error, errorType: parserResult.errorType }
   } else if (parserResult.result === false && parserResult.errorType === ERROR_DIDNT_BEGIN) {
-    return { result: IGNORE, text }
+    return { result: IGNORE, text: parserResult.text }
   } else {
     return parserResult
   }
@@ -36,20 +36,21 @@ const atLeast = (num, type, parser) => text => {
   let parserResult = parser(text)
   const length = parserResult.result.length
   if(length < num){
-    if(parserResult.error){
-      return {
-        result: false,
-        text: parserResult.text,
-        error: parserResult.error,
-        errorType: parserResult.errorType
-      }
-    } else {
+    // if(parserResult.error && parserResult.parser !== WORD && parserResult.parser !== INTEGER){
+    //   let result = {
+    //     result: false,
+    //     text: parserResult.text,
+    //     error: parserResult.error,
+    //     errorType: length ? parserResult.errorType : ERROR_DIDNT_BEGIN
+    //   }
+    //   return result
+    // } else {
       return {
         result: false,
         text,
         error: `Expected at least ${num} ${type} but found ${length}`,
         errorType: length ? ERROR_PARSER_FAILED : ERROR_DIDNT_BEGIN }
-    }
+    // }
   } else {
     return parserResult
   }

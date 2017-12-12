@@ -33,13 +33,3 @@ describe('atLeast', () => {
     assert(result2.error === `Expected at least 3 dot but found 2`)
   })
 })
-//
-// describe('maybe', () => {
-//
-//   const parser =
-//
-//   it('works', () => {
-//     const result1 = parser(test1)
-//     assert.equal(result1.result, '12')
-//   })
-// })
