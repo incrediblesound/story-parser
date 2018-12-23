@@ -13,7 +13,7 @@ OPTION 3 "Take the door at the end of the hall"
 --------------------------------------
 PAGE 3
 "The hall ends in lava, you die!"
-(end)
+END
 --------------------------------------
 PAGE 1
 "You are in an empty room."
@@ -22,7 +22,7 @@ OPTION 0
 --------------------------------------
 PAGE 2
 "You are in a bright green field, you made it!"
-(end)`
+END`
 
 describe('simple story with continued text', () => {
   const parserResult = parser(testStory)

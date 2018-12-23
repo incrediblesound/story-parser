@@ -11,7 +11,7 @@ OPTION 1 "Go to room 1"
 PAGE 1
 "Room one fool."
 KJHGKJHGKHJg
-(end)
+END
 ---------------------------------------`
 
 describe('main parser', () => {
@@ -20,7 +20,7 @@ describe('main parser', () => {
     assert.equal(parserResult.result, false)
     assert.equal(parserResult.text,
 `KJHGKJHGKHJg
-(end)
+END
 ---------------------------------------`)
   })
 })

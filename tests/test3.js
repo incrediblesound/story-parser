@@ -22,7 +22,7 @@ OPTION 0
 --------------------------------------
 PAGE 2
 "You are in a bright green field, you made it!"
-(end)`
+END`
 
 describe('simple story with locked room', () => {
   const parserResult = parser(testStory)

@@ -33,7 +33,7 @@ WEAPON "fire" DAMAGE 5
 ITEM TYPE "weapon" NAME "magic sword"
 DAMAGE 5 SPEED 5
 
-(end)
+END
 `
 
 describe('rich story with combat and rewards text', () => {

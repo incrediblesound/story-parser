@@ -28,7 +28,7 @@ ITEM TYPE "drop" NAME "weapons"
 
 ITEM TYPE "health" NAME "bottle" RECOVERY 5
 
-(end)
+END
 --------------------------------------`
 
 describe('main parser', () => {

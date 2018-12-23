@@ -4,7 +4,7 @@ A parser for choose your own adventure stories with optional combat system
 Story Parser uses parser combinators to turn a simple text format into a JavaScript object.
 
 ## Example Story
-The main parser expects a series of numbered pages with options that each point to the number of another page. The dashes that separate the pages are optional. Pages that end the story must be terminated with the `(end)` keyword.
+The main parser expects a series of numbered pages with options that each point to the number of another page. The dashes that separate the pages are optional. Pages that end the story must be terminated with the `END` keyword.
 
 Input text:
 ```
@@ -20,7 +20,7 @@ OPTION 3
 --------------------------------------
 PAGE 3
 "The hall ends in lava, you die!"
-(end)
+END
 --------------------------------------
 PAGE 1
 "You are in an empty room."
@@ -29,7 +29,7 @@ OPTION 0
 --------------------------------------
 PAGE 2
 "You are in a bright green field, you made it!"
-(end)
+END
 ```
 
 Output JS:
