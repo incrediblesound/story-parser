@@ -47,7 +47,19 @@ interface Page {
   rewards: any[];
 }
 
-interface Player {}
+interface Weapon {
+  name: string;
+  damage: number;
+  speed: number;
+}
+
+interface Player {
+    name: string;
+    health: number;
+    defense: number;
+    weapons: Weapon[];
+    armor: any[];
+}
 
 interface Option {
   target: number;
@@ -59,7 +71,13 @@ interface Story {
   player: Player | null;
 }
 
-const initalPlayer = () => ({})
+const initalPlayer = (name: string, health: number, defense: number): Player => ({
+    name,
+    health,
+    defense,
+    weapons: [],
+    armor: [],
+})
 
 const initialOption = (): Option => ({
   target: -1,
@@ -95,6 +113,8 @@ const parser = (rawText: string) => {
       const tokens = parseLine(line)
       if (tokens[0].value === 'PAGE') {
         processPage(parserState)
+      } else if (tokens[0].value === 'PLAYER') {
+        processPlayer(parserState)
       }
     } else {
       parserState.nextLine()
@@ -109,7 +129,6 @@ const processPage = (parserState: ParserState) => {
   let line = null
   while(!finished && !parserState.isFinished()) {
     line = parserState.getCurrentLine()
-
     if (!line.length) {
       parserState.nextLine()
       continue
@@ -172,6 +191,64 @@ const processPage = (parserState: ParserState) => {
     }
   }
   parserState.addPage(page)
+}
+
+/*
+PLAYER "hero"
+HEALTH 10 ATTACK 3 DEFENSE 2
+ITEM TYPE "weapon" NAME "sword" DAMAGE 4 SPEED 3
+ITEM TYPE "armor" NAME "leather" DEFENSE 1
+*/
+const processPlayer = (parserState: ParserState) => {
+  let finished = false;
+  let name, health, attack, defense;
+  let weapons = [];
+  let armor = [];
+  while (!finished && !parserState.isFinished()) {
+    let line = parserState.getCurrentLine()
+    if (!line.length) {
+      parserState.nextLine()
+    } else {
+      let tokens = parseLine(line)
+      if (tokens[0].value === 'PAGE') {
+        finished = true
+      } else if (tokens[0].value === 'PLAYER') {
+        name = tokens[1].value
+        parserState.nextLine()
+      } else if (tokens[0].value === 'ITEM') {
+        let keyValues = getKeyValues(tokens.slice(1))
+        if (keyValues.TYPE === 'armor') {
+          armor.push({ name: keyValues.NAME, defense: keyValues.DEFENSE })
+        } else if (keyValues.TYPE === 'weapon') {
+          weapons.push({ name: keyValues.NAME, damage: keyValues.DAMAGE, speed: keyValues.SPEED })
+        }
+        parserState.nextLine()
+      } else {
+        let keyValues = getKeyValues(tokens)
+        health = keyValues.HEALTH
+        attack = keyValues.ATTACK
+        defense = keyValues.DEFENSE
+        parserState.nextLine()
+      }
+    }
+  }
+  const player = initalPlayer(name, health, defense)
+  player.weapons = weapons
+  player.armor = armor
+  parserState.story.player = player
+}
+
+const getKeyValues = (tokens: any[]) => {
+  const result: any = {}
+  let key: string;
+  tokens.forEach((token, i) => {
+    if (!(i % 2)) {
+      key = token.value
+    } else {
+      result[key] = token.value
+    }
+  })
+  return result
 }
 
 module.exports = parser
