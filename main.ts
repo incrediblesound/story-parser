@@ -39,11 +39,12 @@ class ParserState implements ParserState {
 
 interface Page {
   id: number;
-  text: string;
+  text: string[];
   options: any[];
   challenges: any[];
   items: any[];
   isEnd: boolean;
+  rewards: any[];
 }
 
 interface Player {}
@@ -55,7 +56,7 @@ interface Option {
 
 interface Story {
   pages: Page[];
-  player: Player;
+  player: Player | null;
 }
 
 const initalPlayer = () => ({})
@@ -67,16 +68,17 @@ const initialOption = (): Option => ({
 
 const initialPage = (): Page => ({
   id: null,
-  text: '',
+  text: [],
   options: [],
   challenges: [],
   items: [],
   isEnd: false,
+  rewards: [],
 })
 
 const initialStory = (): Story => ({
   pages: [],
-  player: initalPlayer()
+  player: null,
 })
 
 const parser = (rawText: string) => {
@@ -124,7 +126,7 @@ const processPage = (parserState: ParserState) => {
     } else if (tokens[0].type === TokenType.TEXT && tokens.length === 1) {
       // Line starts a text block
       if (tokens[0].complete) {
-        page.text = tokens[0].value
+        page.text.push(tokens[0].value)
       } else {
         let stringComplete = false
         let bodyText = tokens[0].value
@@ -139,7 +141,7 @@ const processPage = (parserState: ParserState) => {
             bodyText = bodyText + line
           }
         }
-        page.text = bodyText
+        page.text.push(bodyText)
       }
     } else if (tokens[0].value === 'OPTION') {
       // Option pointing to another page
