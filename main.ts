@@ -3,7 +3,7 @@ export {};
 const {
   parseLine,
   TokenType,
-} = require('./utils')
+} = require('./utils.ts')
 
 interface ParserState {
   currentLine: number;
@@ -17,19 +17,24 @@ interface ParserState {
   addPage(page: Page): void;
   isFinished(): boolean;
 }
-const parserState: ParserState = {
-  currentLine: -1,
-  currentPage: null,
-  parserError: null,
-  finished: false,
-  lines: [],
-  story: null,
-  getCurrentLine: function() {
+
+class ParserState implements ParserState {
+  constructor(){
+    this.currentLine = -1;
+    this.currentPage = null;
+    this.parserError = null;
+    this.finished = false;
+    this.lines = [];
+    this.story = null;
+  }
+  getCurrentLine() {
     return this.lines[this.currentLine] 
-  },
-  nextLine: function() { this.currentLine += 1 },
-  addPage: function (page) { this.story.pages.push(page) },
-  isFinished: function() { return this.currentLine >= this.lines.length - 1 }
+  }
+  nextLine() { this.currentLine += 1 }
+  addPage(page: Page) { this.story.pages.push(page) }
+  isFinished() { 
+    return this.currentLine >= this.lines.length - 1 
+  }
 }
 
 interface Page {
@@ -43,10 +48,20 @@ interface Page {
 
 interface Player {}
 
+interface Option {
+  target: number;
+  text: string;
+}
+
+interface Story {
+  pages: Page[];
+  player: Player;
+}
+
 const initalPlayer = () => ({})
 
-const initialOption = () => ({
-  target: null,
+const initialOption = (): Option => ({
+  target: -1,
   text: '',
 })
 
@@ -59,12 +74,13 @@ const initialPage = (): Page => ({
   isEnd: false,
 })
 
-const initialStory = () => ({
+const initialStory = (): Story => ({
   pages: [],
   player: initalPlayer()
 })
 
-const parser = (rawText) => {
+const parser = (rawText: string) => {
+  const parserState = new ParserState()
   parserState.lines = rawText.split('\n')
   parserState.story = initialStory()
 
@@ -89,7 +105,7 @@ const processPage = (parserState: ParserState) => {
   const page = initialPage()
   let finished = false
   let line = null
-  while(!finished) {
+  while(!finished && !parserState.isFinished()) {
     line = parserState.getCurrentLine()
 
     if (!line.length) {
@@ -145,9 +161,11 @@ const processPage = (parserState: ParserState) => {
     } else if (tokens[0].value === 'END') {
       page.isEnd = true
       finished = true
+      parserState.nextLine()
     }
 
-    if (!finished) {
+    if (!finished && !parserState.isFinished()) {
+      // if we're not done with the page (or the story) go to next line
       parserState.nextLine()
     }
   }

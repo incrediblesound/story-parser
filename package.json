@@ -2,12 +2,12 @@
   "name": "story-parser",
   "version": "1.1.2",
   "description": "A parser for interactive stories.",
-  "main": "main.js",
+  "main": "main.ts",
   "directories": {
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha ./tests/."
+    "test": "mocha -r ts-node/register ./tests/."
   },
   "engines": {
     "node": "8.1.4"

@@ -19,11 +19,22 @@ PAGE 2
 "You are in a bright green field, you made it!"
 END`
 
-describe('simple story with three pages', () => {
-  const story = parser(testStory)
-  console.log(story.pages[0])
-  it('has three pages', () => {
+const testStory2 = `
+
+PAGE 0
+"this place has two exits."
+OPTION 1 "This option goes to page 1"
+OPTION 2 "This option goes to page 2"`
+
+describe('simple story', () => {
+  it('three page story parsed has three pages', () => {
+    const story = parser(testStory)
     assert(story.pages)
     assert.equal(story.pages.length, 3)
+  })
+  it('one page story parsed has one page', () => {
+    const story2 = parser(testStory2)
+    assert(story2.pages)
+    assert.equal(story2.pages.length, 1)
   })
 })

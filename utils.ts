@@ -1,17 +1,17 @@
-export const TokenType = {
-  WORD: 0,
-  NUMBER: 1,
-  TEXT: 2,
+enum TokenType {
+  WORD = 0,
+  NUMBER = 1,
+  TEXT = 2,
 }
 
-export interface Token {
-  type: typeof TokenType;
+interface Token {
+  type: number;
   value: string;
   complete?: boolean;
 }
 
 const parseLine = (line: string): Token[] => {
-  const tokens = []
+  const tokens: Token[] = []
   let index = 0
   while (index < line.length) {
 
@@ -56,12 +56,10 @@ const parseLine = (line: string): Token[] => {
   return tokens
 }
 
-const isNumber = string => /[0-9]/.test(string)
-const isCapitalLetter = string => /[A-Z]/.test(string)
+const isNumber = (string: string) => /[0-9]/.test(string)
+const isCapitalLetter = (string: string) => /[A-Z]/.test(string)
 
 module.exports = {
-  isNumber,
-  isCapitalLetter,
-  parseLine,
   TokenType,
+  parseLine,
 }
