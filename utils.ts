@@ -12,6 +12,9 @@ interface Token {
 
 const parseLine = (line: string): Token[] => {
   const tokens: Token[] = []
+  if (!line.length) {
+    return tokens;
+  }
   let index = 0
   while (index < line.length) {
 
@@ -62,4 +65,5 @@ const isCapitalLetter = (string: string) => /[A-Z]/.test(string)
 module.exports = {
   TokenType,
   parseLine,
+  isNumber,
 }

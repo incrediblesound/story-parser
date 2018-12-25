@@ -3,6 +3,7 @@ export {};
 const {
   parseLine,
   TokenType,
+  isNumber,
 } = require('./utils.ts')
 
 interface ParserState {
@@ -37,11 +38,36 @@ class ParserState implements ParserState {
   }
 }
 
+interface Challenge {
+  name: string;
+  health: number;
+  speed: number;
+  attack: number;
+  defense: number;
+  weapon: Weapon;
+}
+
+const makeChallenge = (
+  name: string,
+  health: number,
+  speed: number,
+  attack: number,
+  defense: number,
+  weapon: Weapon
+) => ({
+  name,
+  health,
+  speed,
+  attack,
+  defense,
+  weapon,
+})
+
 interface Page {
   id: number;
   text: string[];
   options: any[];
-  challenges: any[];
+  challenges: Challenge[];
   items: any[];
   isEnd: boolean;
   rewards: any[];
@@ -54,11 +80,12 @@ interface Weapon {
 }
 
 interface Player {
-    name: string;
-    health: number;
-    defense: number;
-    weapons: Weapon[];
-    armor: any[];
+  name: string;
+  attack: number;
+  health: number;
+  defense: number;
+  weapons: Weapon[];
+  armor: any[];
 }
 
 interface Option {
@@ -71,8 +98,9 @@ interface Story {
   player: Player | null;
 }
 
-const initalPlayer = (name: string, health: number, defense: number): Player => ({
+const initalPlayer = (name: string, attack: number, health: number, defense: number): Player => ({
     name,
+    attack,
     health,
     defense,
     weapons: [],
@@ -162,6 +190,9 @@ const processPage = (parserState: ParserState) => {
         }
         page.text.push(bodyText)
       }
+    } else if (tokens[0].value === 'CHALLENGE') {
+      const challenge = processChallenge(parserState)
+      page.challenges.push(challenge)
     } else if (tokens[0].value === 'OPTION') {
       // Option pointing to another page
       const option = initialOption()
@@ -179,10 +210,22 @@ const processPage = (parserState: ParserState) => {
         }
       }
       page.options.push(option)
+    } else if (tokens[0].value === 'ITEM') {
+      // Item in room
+      let keyValues = getKeyValues(tokens)
+      if (keyValues.ITEM === 'armor') {
+        page.rewards.push({ name: keyValues.NAME, defense: keyValues.DEFENSE })
+      } else if (keyValues.ITEM === 'weapon') {
+        page.rewards.push({ name: keyValues.NAME, damage: keyValues.DAMAGE, speed: keyValues.SPEED })
+      }
+      parserState.nextLine()
     } else if (tokens[0].value === 'END') {
+      // page is end of story
       page.isEnd = true
       finished = true
       parserState.nextLine()
+    } else {
+      throw new Error(`Unknown syntax: "${line}"`)
     }
 
     if (!finished && !parserState.isFinished()) {
@@ -192,6 +235,49 @@ const processPage = (parserState: ParserState) => {
   }
   parserState.addPage(page)
 }
+
+/*
+CHALLENGE "skeleton"
+TEXT "A skeleton attacks you!"
+HEALTH 5 SPEED 3 ATTACK 1 DEFENSE 4
+WEAPON "dagger" DAMAGE 3
+*/
+const processChallenge = (parserState: ParserState): Challenge => {
+  let finished = false;
+  let name, health, speed, attack, defense, weapon;
+  while (!finished && !parserState.isFinished()) {
+    let line = parserState.getCurrentLine()
+    let tokens = parseLine(line)
+    if (!tokens.length) {
+      finished = true
+    } else if (tokens[0].value === 'CHALLENGE') {
+      name = tokens[1].value
+      parserState.nextLine()
+    } else if (tokens[0].value === 'TEXT') {
+      // TODO
+      parserState.nextLine()
+    } else if (tokens[0].value === 'WEAPON') {
+      let keyValues = getKeyValues(tokens)
+      weapon = {
+        name: keyValues.WEAPON,
+        damage: keyValues.DAMAGE,
+        speed: 0,
+      }
+      parserState.nextLine()
+    } else if (hasToken(tokens, 'HEALTH')) {
+      let keyValues = getKeyValues(tokens)
+      health = keyValues.HEALTH
+      speed = keyValues.SPEED
+      attack = keyValues.ATTACK
+      defense = keyValues.DEFENSE
+      parserState.nextLine()
+    }
+  }
+  const challenge = makeChallenge(name, health, speed, attack, defense, weapon)
+  return challenge
+}
+
+const hasToken = (tokens: any[], value: string) => !!tokens.filter(token => token.value === value).length
 
 /*
 PLAYER "hero"
@@ -216,10 +302,10 @@ const processPlayer = (parserState: ParserState) => {
         name = tokens[1].value
         parserState.nextLine()
       } else if (tokens[0].value === 'ITEM') {
-        let keyValues = getKeyValues(tokens.slice(1))
-        if (keyValues.TYPE === 'armor') {
+        let keyValues = getKeyValues(tokens)
+        if (keyValues.ITEM === 'armor') {
           armor.push({ name: keyValues.NAME, defense: keyValues.DEFENSE })
-        } else if (keyValues.TYPE === 'weapon') {
+        } else if (keyValues.ITEM === 'weapon') {
           weapons.push({ name: keyValues.NAME, damage: keyValues.DAMAGE, speed: keyValues.SPEED })
         }
         parserState.nextLine()
@@ -232,7 +318,7 @@ const processPlayer = (parserState: ParserState) => {
       }
     }
   }
-  const player = initalPlayer(name, health, defense)
+  const player = initalPlayer(name, attack, health, defense)
   player.weapons = weapons
   player.armor = armor
   parserState.story.player = player
@@ -245,7 +331,10 @@ const getKeyValues = (tokens: any[]) => {
     if (!(i % 2)) {
       key = token.value
     } else {
-      result[key] = token.value
+      let value = isNumber(token.value)
+        ? parseInt(token.value)
+        : token.value
+      result[key] = value
     }
   })
   return result
