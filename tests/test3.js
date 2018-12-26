@@ -1,6 +1,41 @@
 const parser = require('../main')
 const assert = require('assert')
 
+const testStoryMoney = 
+`
+PLAYER "hero"
+HEALTH 10 ATTACK 3 DEFENSE 2
+ITEM "weapon" NAME "sword" DAMAGE 4 SPEED 3
+ITEM "armor" NAME "leather" DEFENSE 1
+MONEY "gold" 10
+MONEY "silver" 5
+
+PAGE 0
+"You are in a room, there is a door to the left and a door to the right.
+It is a dark room."
+OPTION 1
+"Take the door on the left"
+OPTION 2
+"Take the door on the right"
+OPTION 3
+"Take the door at the end of the hall"
+
+PAGE 3
+MONEY "gold" 10
+"The skeleton's bones lie on the floor."
+
+OPTION 0
+"Go back"
+
+PAGE 1
+"You are in an empty room."
+OPTION 0
+"Go back"
+
+PAGE 2
+"You are in a bright green field, you made it!"
+END`
+
 const testStory =
 `PAGE 0
 "You are in a room, there is a door to the left and a door to the right.
@@ -16,7 +51,7 @@ OPTION 0 "Go back"
 --------------------------------------
 PAGE 1
 "You are in an empty room."
-RECOVER_HEALTH
+RECOVER_HEALTH 10
 OPTION 0
 "Go back"
 --------------------------------------
@@ -25,13 +60,15 @@ PAGE 2
 END`
 
 describe('simple story with locked room', () => {
-  const parserResult = parser(testStory)
-  const story = parserResult.result
-  it('has four pages', () => {
-    assert(story.pages)
-    assert.equal(story.pages.length, 4)
-  })
-  it('has a type of SIMPLE', () => {
-    assert.equal(story.type, 'SIMPLE')
+  // it('has four pages', () => {
+  //   const parserResult = parser(testStory)
+  //   const story = parserResult.result
+  //   assert(story.pages)
+  //   assert.equal(story.pages.length, 4)
+  // })
+  it('parses money', () => {
+    const story = parser(testStoryMoney)
+    console.log(story.pages[1])
+    console.log(story.player)
   })
 })

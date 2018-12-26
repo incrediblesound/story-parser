@@ -74,6 +74,7 @@ interface Page {
   items: any[];
   isEnd: boolean;
   rewards: any[];
+  currency: Currency[];
 }
 
 interface Weapon {
@@ -83,6 +84,11 @@ interface Weapon {
   type?: string;
 }
 
+interface Currency {
+  name: string;
+  amount: number;
+}
+
 interface Player {
   name: string;
   attack: number;
@@ -90,6 +96,7 @@ interface Player {
   defense: number;
   weapons: Weapon[];
   armor: any[];
+  currency?: Currency[];
 }
 
 interface Option {
@@ -102,13 +109,20 @@ interface Story {
   player: Player | null;
 }
 
-const initalPlayer = (name: string, attack: number, health: number, defense: number): Player => ({
+const initalPlayer = (
+  name: string, 
+  attack: number, 
+  health: number, 
+  defense: number,
+  currency?: Currency[],
+  ): Player => ({
     name,
     attack,
     health,
     defense,
     weapons: [],
     armor: [],
+    currency,
 })
 
 const initialOption = (): Option => ({
@@ -124,6 +138,7 @@ const initialPage = (): Page => ({
   items: [],
   isEnd: false,
   rewards: [],
+  currency: [],
 })
 
 const initialStory = (): Story => ({
@@ -197,6 +212,10 @@ const processPage = (parserState: ParserState) => {
     } else if (tokens[0].value === 'CHALLENGE') {
       const challenge = processChallenge(parserState)
       page.challenges.push(challenge)
+    } else if (tokens[0].value === 'MONEY') {
+      let name = tokens[1].value
+      let amount = parseInt(tokens[2].value)
+      page.currency.push({ name, amount })
     } else if (tokens[0].value === 'OPTION') {
       // Option pointing to another page
       const option = initialOption()
@@ -287,10 +306,11 @@ PLAYER "hero"
 HEALTH 10 ATTACK 3 DEFENSE 2
 ITEM TYPE "weapon" NAME "sword" DAMAGE 4 SPEED 3
 ITEM TYPE "armor" NAME "leather" DEFENSE 1
+MONEY "gold" 10
 */
 const processPlayer = (parserState: ParserState) => {
   let finished = false;
-  let name, health, attack, defense;
+  let name, health, attack, defense, currency=[];
   let weapons = [];
   let armor = [];
   while (!finished && !parserState.isFinished()) {
@@ -303,6 +323,12 @@ const processPlayer = (parserState: ParserState) => {
         finished = true
       } else if (tokens[0].value === 'PLAYER') {
         name = tokens[1].value
+        parserState.nextLine()
+      } else if (tokens[0].value === 'MONEY') {
+        currency.push({ 
+          name: tokens[1].value, 
+          amount: parseInt(tokens[2].value) 
+        })
         parserState.nextLine()
       } else if (tokens[0].value === 'ITEM') {
         let keyValues = getKeyValues(tokens)
@@ -321,7 +347,7 @@ const processPlayer = (parserState: ParserState) => {
       }
     }
   }
-  const player = initalPlayer(name, attack, health, defense)
+  const player = initalPlayer(name, attack, health, defense, currency)
   player.weapons = weapons
   player.armor = armor
   parserState.story.player = player
