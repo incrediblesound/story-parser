@@ -85,6 +85,12 @@ interface Weapon {
   cost?: Currency;
 }
 
+interface Key {
+  name: string;
+  type?: string;
+  cost?: Currency;
+}
+
 interface Currency {
   name: string;
   amount: number;
@@ -110,6 +116,7 @@ interface Player {
 interface Option {
   target: number;
   text: string;
+  lock?: string;
 }
 
 interface Story {
@@ -232,13 +239,21 @@ const processPage = (parserState: ParserState) => {
       const option = initialOption()
       option.target = parseInt(tokens[1].value)
       if (tokens[2] && tokens[2].type === TokenType.TEXT) {
+        // third token should be option description
         option.text = tokens[2].value
+        if (tokens[3] && tokens[3].value === 'LOCK') {
+          option.lock = tokens[4].value
+        }
       } else {
+        // otherwise description is on next line && check for lock where description would be
+        if (tokens[2] && tokens[2].value === 'LOCK') {
+          option.lock = tokens[3].value
+        }
         parserState.nextLine()
         line = parserState.getCurrentLine()
         tokens = parseLine(line)
-        if (tokens.length > 1 || tokens[0].type !== TokenType.TEXT) {
-          // Throw syntax error
+        if (tokens[0].type !== TokenType.TEXT) {
+          parserState.parserError = `Line ${parserState.currentLine}: No description found for option`
         } else {
           option.text = tokens[0].value
         }
@@ -252,6 +267,8 @@ const processPage = (parserState: ParserState) => {
         reward = { type: keyValues.ITEM, name: keyValues.NAME, defense: keyValues.DEFENSE } as Armor
       } else if (keyValues.ITEM === 'weapon') {
         reward = { type: keyValues.ITEM, name: keyValues.NAME, damage: keyValues.DAMAGE, speed: keyValues.SPEED } as Weapon
+      } else if (keyValues.ITEM === 'key') {
+        reward = { type: 'key', name: keyValues.NAME } as Key
       }
       parserState.nextLine()
       line = parserState.getCurrentLine()
