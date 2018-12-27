@@ -34,7 +34,7 @@ class ParserState implements ParserState {
   nextLine() { this.currentLine += 1 }
   addPage(page: Page) { this.story.pages.push(page) }
   isFinished() { 
-    return this.currentLine >= this.lines.length - 1 
+    return this.currentLine > this.lines.length - 1 
   }
 }
 

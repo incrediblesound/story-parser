@@ -3,42 +3,28 @@ const assert = require('assert')
 
 const testStory = `
 PLAYER "hero"
-HEALTH 10 ATTACK 3 DEFENSE 2
-ITEM TYPE "weapon" NAME "sword" DAMAGE 4 SPEED 3
-ITEM TYPE "armor" NAME "leather" DEFENSE 1
---------------------------------------
+HEALTH 20 ATTACK 3 DEFENSE 4
+ITEM "weapon" NAME "sword" DAMAGE 3 SPEED 4
+ITEM "armor" NAME "leather" DEFENSE 1
+MONEY "gold" 20
+
 PAGE 0
-"Take the gold to buy the armor"
+"this place has two exits."
+OPTION 1 "This option goes to page 1"
+OPTION 2 "This option goes to page 2" LOCK "key"
 
-ITEM TYPE "key" NAME "10 gold"
-
-OPTION 1 "buy armor" LOCK "10 gold"
-OPTION 2 "fight dragon"
-----------------------------------
-PAGE 1
-"Here it is! A suit of excellent armor."
-
-ITEM TYPE "armor" NAME "plate mail" DEFENSE 8
-
-OPTION 0 "go back"
--------------------------------
 PAGE 2
-"You have defeated the dragon!"
+"this place has two exits."
+OPTION 0 "This option goes to page 0"
 
-CHALLENGE "dragon"
-TEXT "There is a dragon in this room!"
-HEALTH 5 SPEED 1 ATTACK 5 DEFENSE 4
-WEAPON "fire" DAMAGE 5
+PAGE 1
+"this place has a key."
+ITEM "key" NAME "key"
 
-ITEM TYPE "weapon" NAME "magic sword"
-DAMAGE 5 SPEED 5
-
-END
-`
+OPTION 0 "This option goes to page 0"`
 
 describe('rich story with combat and rewards text', () => {
-  const parserResult = parser(testStory)
-  const story = parserResult.result
+  const story = parser(testStory)
   it('has three pages', () => {
     assert(story.pages.length === 3)
   })

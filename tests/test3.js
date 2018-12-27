@@ -62,8 +62,6 @@ END`
 describe('simple story with locked room', () => {
   it('has four pages', () => {
     const story = parser(testStory)
-    console.log(story.pages[0].options)
-    console.log(story.pages[1])
     assert(story.pages)
     assert.equal(story.pages.length, 4)
   })
