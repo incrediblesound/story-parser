@@ -8,28 +8,21 @@ It is a dark room."
 "You don't know how you got in the room."
 "What do you want to do?"
 OPTION 1 "Take the door on the left"
-OPTION 2 "Take the door on the right"
-OPTION 3 "Take the door at the end of the hall"
---------------------------------------
-PAGE 3
-"The hall ends in lava, you die!"
-END
---------------------------------------
-PAGE 1
-"You are in an empty room."
-OPTION 0
-"Go back"
---------------------------------------
-PAGE 2
-"You are in a bright green field, you made it!"
-END`
 
-describe('simple story with continued text', () => {
-  const parserResult = parser(testStory)
-  const story = parserResult.result
-  it('has an array of page text', () => {
-    const text = story.pages[0].text
-    assert(Array.isArray(text))
-    assert(text.length, 3)
+PAGE 1
+"The hall ends in lava, you die!"
+
+ITEM "weapon" NAME "magic sword" DAMAGE 4 SPEED 6 
+COST "gold" 20
+
+END
+`
+
+describe('simple story with items for sale', () => {
+  it('has an item with a cost', () => {
+    const story = parser(testStory)
+    const reward = story.pages[1].rewards[0]
+    assert.equal(reward.cost.name, 'gold')
+    assert.equal(reward.cost.amount, 20)
   })
 })

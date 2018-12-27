@@ -82,7 +82,6 @@ describe('main parser', () => {
   // })
   it('parses a story with player and challenge', () => {
     const story = parser(testStory)
-    console.log(story.pages[1])
     assert.equal(story.pages.length, 4)
   })
 })

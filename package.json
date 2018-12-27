@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha -r ts-node/register ./tests/."
+    "test": "mocha -r ts-node/register ./tests/test1 ./tests/test2 ./tests/test3 ./tests/test4"
   },
   "engines": {
     "node": "8.1.4"

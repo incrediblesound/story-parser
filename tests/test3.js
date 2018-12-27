@@ -68,7 +68,7 @@ describe('simple story with locked room', () => {
   // })
   it('parses money', () => {
     const story = parser(testStoryMoney)
-    console.log(story.pages[1])
-    console.log(story.player)
+    assert.equal(story.pages[1].currency[0].name, 'gold')
+    assert.equal(story.player.currency[1].name, 'silver')
   })
 })

@@ -82,11 +82,19 @@ interface Weapon {
   damage: number;
   speed: number;
   type?: string;
+  cost?: Currency;
 }
 
 interface Currency {
   name: string;
   amount: number;
+}
+
+interface Armor {
+  name: string;
+  defense: number;
+  type?: string;
+  cost?: Currency;
 }
 
 interface Player {
@@ -155,6 +163,10 @@ const parser = (rawText: string) => {
   parserState.nextLine()
 
   while (!parserState.isFinished()) {
+    if (parserState.parserError) {
+      return parserState.parserError
+    }
+
     line = parserState.getCurrentLine()
     if (line.length) {
       const tokens = parseLine(line)
@@ -180,7 +192,6 @@ const processPage = (parserState: ParserState) => {
       parserState.nextLine()
       continue
     }
-
     let tokens = parseLine(line)
     if (tokens[0].value === 'PAGE'){
       // Simple page declaration eg PAGE 1
@@ -236,11 +247,25 @@ const processPage = (parserState: ParserState) => {
     } else if (tokens[0].value === 'ITEM') {
       // Item in room
       let keyValues = getKeyValues(tokens)
+      let reward
       if (keyValues.ITEM === 'armor') {
-        page.rewards.push({ type: keyValues.ITEM, name: keyValues.NAME, defense: keyValues.DEFENSE })
+        reward = { type: keyValues.ITEM, name: keyValues.NAME, defense: keyValues.DEFENSE } as Armor
       } else if (keyValues.ITEM === 'weapon') {
-        page.rewards.push({ type: keyValues.ITEM, name: keyValues.NAME, damage: keyValues.DAMAGE, speed: keyValues.SPEED })
+        reward = { type: keyValues.ITEM, name: keyValues.NAME, damage: keyValues.DAMAGE, speed: keyValues.SPEED } as Weapon
       }
+      parserState.nextLine()
+      line = parserState.getCurrentLine()
+      // next line is either "COST" or empty line
+      if (line.length) {
+        tokens = parseLine(line)
+        if (tokens[0].value === 'COST') {
+          reward.cost = { name: tokens[1].value, amount: parseInt(tokens[2].value) }
+        } else {
+          parserState.parserError = `Line ${parserState.currentLine}: Must be COST or empty line after an ITEM`
+          return;
+        }
+      }
+      page.rewards.push(reward)
     } else if (tokens[0].value === 'END') {
       // page is end of story
       page.isEnd = true
