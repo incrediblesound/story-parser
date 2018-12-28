@@ -77,18 +77,25 @@ interface Page {
   currency: Currency[];
 }
 
-interface Weapon {
+interface Purchasable {
+  cost?: Currency;
+}
+
+interface Weapon extends Purchasable {
   name: string;
   damage: number;
   speed: number;
   type?: string;
-  cost?: Currency;
 }
 
-interface Key {
+interface Key extends Purchasable {
   name: string;
   type?: string;
-  cost?: Currency;
+}
+
+interface HiddenItem {
+  name: string;
+  type: string;
 }
 
 interface Currency {
@@ -96,11 +103,10 @@ interface Currency {
   amount: number;
 }
 
-interface Armor {
+interface Armor extends Purchasable {
   name: string;
   defense: number;
   type?: string;
-  cost?: Currency;
 }
 
 interface Player {
@@ -116,6 +122,7 @@ interface Player {
 interface Option {
   target: number;
   text: string;
+  condition?: HiddenItem;
   lock?: string;
 }
 
@@ -243,11 +250,15 @@ const processPage = (parserState: ParserState) => {
         option.text = tokens[2].value
         if (tokens[3] && tokens[3].value === 'LOCK') {
           option.lock = tokens[4].value
+        } else if (tokens[3] && tokens[3].value === 'IF') {
+          option.condition = { name: tokens[4].value, type: 'hidden' }
         }
       } else {
         // otherwise description is on next line && check for lock where description would be
         if (tokens[2] && tokens[2].value === 'LOCK') {
           option.lock = tokens[3].value
+        } else if (tokens[3] && tokens[3].value === 'IF') {
+          option.condition = { name: tokens[4].value, type: 'hidden' }
         }
         parserState.nextLine()
         line = parserState.getCurrentLine()
@@ -269,6 +280,8 @@ const processPage = (parserState: ParserState) => {
         reward = { type: keyValues.ITEM, name: keyValues.NAME, damage: keyValues.DAMAGE, speed: keyValues.SPEED } as Weapon
       } else if (keyValues.ITEM === 'key') {
         reward = { type: 'key', name: keyValues.NAME } as Key
+      } else if (keyValues.ITEM === 'hidden') {
+        reward = { type: 'hidden', name: keyValues.NAME } as HiddenItem
       }
       parserState.nextLine()
       line = parserState.getCurrentLine()
@@ -276,7 +289,7 @@ const processPage = (parserState: ParserState) => {
       if (line.length) {
         tokens = parseLine(line)
         if (tokens[0].value === 'COST') {
-          reward.cost = { name: tokens[1].value, amount: parseInt(tokens[2].value) }
+          (reward as Weapon | Armor | Key).cost = { name: tokens[1].value, amount: parseInt(tokens[2].value) }
         } else {
           parserState.parserError = `Line ${parserState.currentLine}: Must be COST or empty line after an ITEM`
           return;

@@ -1,13 +1,13 @@
 {
   "name": "story-parser",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "A parser for interactive stories.",
   "main": "dist/bundle.js",
   "directories": {
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha -r ts-node/register ./tests/test1 ./tests/test2 ./tests/test3 ./tests/test4"
+    "test": "mocha -r ts-node/register ./tests/test1 ./tests/test2 ./tests/test3 ./tests/test4 ./tests/test5 ./tests/test6"
   },
   "engines": {
     "node": "8.1.4"
