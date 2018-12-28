@@ -123,6 +123,7 @@ interface Option {
   target: number;
   text: string;
   condition?: HiddenItem;
+  exclude?: HiddenItem;
   lock?: string;
 }
 
@@ -214,6 +215,8 @@ const processPage = (parserState: ParserState) => {
       } else {
         finished = true
       }
+    } else if (tokens[0].type === TokenType.COMMENT) {
+      parserState.nextLine()
     } else if (tokens[0].type === TokenType.TEXT && tokens.length === 1) {
       // Line starts a text block
       if (tokens[0].complete) {
@@ -251,14 +254,22 @@ const processPage = (parserState: ParserState) => {
         if (tokens[3] && tokens[3].value === 'LOCK') {
           option.lock = tokens[4].value
         } else if (tokens[3] && tokens[3].value === 'IF') {
-          option.condition = { name: tokens[4].value, type: 'hidden' }
+          if (tokens[4].value === 'NOT') {
+            option.exclude = { name: tokens[5].value, type: 'hidden' }  
+          } else {
+            option.condition = { name: tokens[4].value, type: 'hidden' }
+          }
         }
       } else {
         // otherwise description is on next line && check for lock where description would be
         if (tokens[2] && tokens[2].value === 'LOCK') {
           option.lock = tokens[3].value
         } else if (tokens[3] && tokens[3].value === 'IF') {
-          option.condition = { name: tokens[4].value, type: 'hidden' }
+          if (tokens[4].value === 'NOT') {
+            option.exclude = { name: tokens[5].value, type: 'hidden' }  
+          } else {
+            option.condition = { name: tokens[4].value, type: 'hidden' }
+          }
         }
         parserState.nextLine()
         line = parserState.getCurrentLine()

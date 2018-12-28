@@ -2,11 +2,12 @@ enum TokenType {
   WORD = 0,
   NUMBER = 1,
   TEXT = 2,
+  COMMENT = 3,
 }
 
 interface Token {
   type: number;
-  value: string;
+  value?: string;
   complete?: boolean;
 }
 
@@ -16,6 +17,9 @@ const parseLine = (line: string): Token[] => {
     return tokens;
   }
   let index = 0
+  if (line.substring(0, 2) === '//') {
+    return [{ type: TokenType.COMMENT }]
+  }
   while (index < line.length) {
 
     if (isCapitalLetter(line[index])) {
