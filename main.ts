@@ -34,7 +34,7 @@ class ParserState implements ParserState {
   nextLine() { this.currentLine += 1 }
   addPage(page: Page) { this.story.pages.push(page) }
   isFinished() { 
-    return this.currentLine > this.lines.length - 1 
+    return this.parserError || this.currentLine > this.lines.length - 1 
   }
 }
 
@@ -91,6 +91,11 @@ interface Weapon extends Purchasable {
 interface Key extends Purchasable {
   name: string;
   type?: string;
+}
+
+interface Health extends Purchasable {
+  type: string;
+  recovery: number;
 }
 
 interface HiddenItem {
@@ -189,12 +194,21 @@ const parser = (rawText: string) => {
         processPage(parserState)
       } else if (tokens[0].value === 'PLAYER') {
         processPlayer(parserState)
+      } else if (tokens[0].type === TokenType.COMMENT) {
+        // skip the comment
+        parserState.nextLine()
+      } else {
+        parserState.parserError = `Line ${parserState.currentLine}: Syntax error`
       }
     } else {
       parserState.nextLine()
     }
   }
-  return parserState.story
+  if (parserState.parserError) {
+    return { error: parserState.parserError, line: parserState.currentLine }
+  } else {
+    return parserState.story
+  }
 }
 
 const processPage = (parserState: ParserState) => {
@@ -207,15 +221,19 @@ const processPage = (parserState: ParserState) => {
       parserState.nextLine()
       continue
     }
+  
     let tokens = parseLine(line)
     if (tokens[0].value === 'PAGE'){
       // Simple page declaration eg PAGE 1
       if (page.id === null) {
         page.id = parseInt(tokens[1].value)
+        parserState.nextLine()
       } else {
+        // don't advance to next line, next processPage invocation handles this declaration
         finished = true
       }
     } else if (tokens[0].type === TokenType.COMMENT) {
+      // skip the comment
       parserState.nextLine()
     } else if (tokens[0].type === TokenType.TEXT && tokens.length === 1) {
       // Line starts a text block
@@ -237,13 +255,16 @@ const processPage = (parserState: ParserState) => {
         }
         page.text.push(bodyText)
       }
+      parserState.nextLine()
     } else if (tokens[0].value === 'CHALLENGE') {
       const challenge = processChallenge(parserState)
       page.challenges.push(challenge)
+      parserState.nextLine()
     } else if (tokens[0].value === 'MONEY') {
       let name = tokens[1].value
       let amount = parseInt(tokens[2].value)
       page.currency.push({ name, amount })
+      parserState.nextLine()
     } else if (tokens[0].value === 'OPTION') {
       // Option pointing to another page
       const option = initialOption()
@@ -281,6 +302,7 @@ const processPage = (parserState: ParserState) => {
         }
       }
       page.options.push(option)
+      parserState.nextLine()
     } else if (tokens[0].value === 'ITEM') {
       // Item in room
       let keyValues = getKeyValues(tokens)
@@ -293,6 +315,8 @@ const processPage = (parserState: ParserState) => {
         reward = { type: 'key', name: keyValues.NAME } as Key
       } else if (keyValues.ITEM === 'hidden') {
         reward = { type: 'hidden', name: keyValues.NAME } as HiddenItem
+      } else if (keyValues.ITEM === 'health') {
+        reward = { type: 'health', recovery: keyValues.RECOVERY } as Health
       }
       parserState.nextLine()
       line = parserState.getCurrentLine()
@@ -307,18 +331,14 @@ const processPage = (parserState: ParserState) => {
         }
       }
       page.rewards.push(reward)
+      parserState.nextLine()
     } else if (tokens[0].value === 'END') {
       // page is end of story
       page.isEnd = true
       finished = true
-      parserState.nextLine()
+      parserState.nextLine() // moves parser to end of text
     } else {
       throw new Error(`Unknown syntax: "${line}"`)
-    }
-
-    if (!finished && !parserState.isFinished()) {
-      // if we're not done with the page (or the story) go to next line
-      parserState.nextLine()
     }
   }
   parserState.addPage(page)

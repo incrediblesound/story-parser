@@ -3,41 +3,64 @@ const assert = require('assert')
 
 const testStory =
 `
-ITEM_DROP "weapons"
-ITEM TYPE "weapon" NAME "ice sword"
-DAMAGE 3 SPEED 6
-ITEM TYPE "weapon" NAME "fire sword"
-DAMAGE 5 SPEED 3
-
-PLAYER "hero"
-HEALTH 20 ATTACK 3 DEFENSE 4
-ITEM TYPE "weapon" NAME "sword" DAMAGE 3 SPEED 4
-ITEM TYPE "weapon" NAME "axe" DAMAGE 5 SPEED 2
-ITEM TYPE "armor" NAME "leather" DEFENSE 1
-----------------------------
-
+// this is the first page
 PAGE 0
-"There is an enemy in this room!"
+"You are in a room, there is a door to the left and a door to the right.
+It is a dark room."
 
-CHALLENGE "enemy"
-TEXT "here is an enemy"
-HEALTH 5 SPEED 3 ATTACK 3 DEFENSE 4
-WEAPON "dagger" DAMAGE 2
+// here are the options
 
-ITEM TYPE "drop" NAME "weapons"
+OPTION 1
+"Take the door on the left"
+OPTION 2
+"Take the door on the right"
 
-ITEM TYPE "health" NAME "bottle" RECOVERY 5
+// end first page
 
-END
---------------------------------------`
+// start next page
+PAGE 1
+"You are in an empty room."
+OPTION 0
+"Go back"
 
-describe('main parser', () => {
-  it('parses a rich story', () => {
-    const parserResult = parser(testStory)
-    const story = parserResult.result
+PAGE 2
+"You are in a bright green field, you made it!"
+END`
 
-    assert.equal(story.type, 'RICH')
-    assert.equal(story.pages.length, 1)
-    assert(story.drops.weapons)
+const testStory2 =
+`
+PAGE 0
+"You are in a room, there is a door to the left and a door to the right.
+It is a dark room."
+ITEM "health" RECOVERY 5
+
+OPTION 1
+"Take the door on the left"
+OPTION 2
+"Take the door on the right"
+
+PAGE 1
+"You are in an empty room."
+ITEM "health" RECOVERY 10
+COST "silver" 10
+
+OPTION 0
+"Go back"
+
+PAGE 2
+"You are in a bright green field, you made it!"
+END`
+
+describe('parser features', () => {
+  it('skips comments', () => {
+    const story = parser(testStory)
+    assert.equal(story.pages.length, 3)
+    assert.equal(story.pages[1].options.length, 1)
+  })
+  it('handles health items w & w/o cost', () => {
+    const story = parser(testStory2)
+    assert.equal(story.pages[0].rewards[0].type, 'health')
+    assert.equal(story.pages[1].rewards[0].type, 'health')
+    assert.equal(story.pages[1].rewards[0].cost.amount, 10)
   })
 })
