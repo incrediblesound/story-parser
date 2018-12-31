@@ -1,13 +1,14 @@
 {
   "name": "story-parser",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "A parser for interactive stories.",
   "main": "dist/bundle.js",
   "directories": {
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha -r ts-node/register ./tests/."
+    "test": "mocha -r ts-node/register ./tests/.",
+    "build": "webpack"
   },
   "engines": {
     "node": "8.1.4"
