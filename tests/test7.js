@@ -32,7 +32,7 @@ const testStory2 =
 PAGE 0
 "You are in a room, there is a door to the left and a door to the right.
 It is a dark room."
-ITEM "health" RECOVERY 5
+ITEM "health" NAME "potion" RECOVERY 5
 
 OPTION 1
 "Take the door on the left"
@@ -41,7 +41,7 @@ OPTION 2
 
 PAGE 1
 "You are in an empty room."
-ITEM "health" RECOVERY 10
+ITEM "health" NAME "first aid" RECOVERY 10
 COST "silver" 10
 
 OPTION 0

@@ -96,6 +96,7 @@ interface Key extends Purchasable {
 interface Health extends Purchasable {
   type: string;
   recovery: number;
+  name: string;
 }
 
 interface HiddenItem {
@@ -316,7 +317,7 @@ const processPage = (parserState: ParserState) => {
       } else if (keyValues.ITEM === 'hidden') {
         reward = { type: 'hidden', name: keyValues.NAME } as HiddenItem
       } else if (keyValues.ITEM === 'health') {
-        reward = { type: 'health', recovery: keyValues.RECOVERY } as Health
+        reward = { type: 'health', recovery: keyValues.RECOVERY, name: keyValues.NAME } as Health
       }
       parserState.nextLine()
       line = parserState.getCurrentLine()
