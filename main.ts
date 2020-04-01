@@ -133,9 +133,15 @@ interface Option {
   lock?: string;
 }
 
+interface Goal {
+  index: number;
+  name: string;
+}
+
 interface Story {
   pages: Page[];
   player: Player | null;
+  goals: Goal[];
 }
 
 const initalPlayer = (
@@ -173,6 +179,7 @@ const initialPage = (): Page => ({
 const initialStory = (): Story => ({
   pages: [],
   player: null,
+  goals: [],
 })
 
 const parser = (rawText: string) => {
@@ -197,6 +204,14 @@ const parser = (rawText: string) => {
         processPlayer(parserState)
       } else if (tokens[0].type === TokenType.COMMENT) {
         // skip the comment
+        parserState.nextLine()
+      } else if (tokens[0].value === 'GOAL') {
+        let goalIndex = tokens[1].value
+        let goalText = tokens[2].value 
+        parserState.story.goals.push({
+          goal: goalText,
+          name: goalIndex,
+        })
         parserState.nextLine()
       } else {
         parserState.parserError = `Line ${parserState.currentLine}: Syntax error`
