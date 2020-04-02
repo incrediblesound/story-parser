@@ -209,8 +209,8 @@ const parser = (rawText: string) => {
         let goalIndex = tokens[1].value
         let goalText = tokens[2].value 
         parserState.story.goals.push({
-          goal: goalText,
-          name: goalIndex,
+          name: goalText,
+          index: goalIndex,
         })
         parserState.nextLine()
       } else {
