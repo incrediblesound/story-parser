@@ -136,6 +136,8 @@ interface Option {
 interface Goal {
   index: number;
   name: string;
+  method: string;
+  condition: string | number;
 }
 
 interface Story {
@@ -206,11 +208,12 @@ const parser = (rawText: string) => {
         // skip the comment
         parserState.nextLine()
       } else if (tokens[0].value === 'GOAL') {
-        let goalIndex = tokens[1].value
-        let goalText = tokens[2].value 
+        // GOAL 2 "Find room 3" ITEM "sword"
         parserState.story.goals.push({
-          name: goalText,
-          index: goalIndex,
+          name: tokens[2].value,
+          index: tokens[1].value,
+          method: tokens[3].value,
+          condition: tokens[4].value,
         })
         parserState.nextLine()
       } else {

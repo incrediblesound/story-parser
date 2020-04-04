@@ -2,9 +2,9 @@ const parser = require('../main')
 const assert = require('assert')
 
 const testStory =`
-GOAL 1 "Find room 2"
-GOAL 2 "Find room 3"
-GOAL 3 "Find room 4"
+GOAL 1 "Find room 2" PAGE 2
+GOAL 2 "Find room 3" ITEM "sword"
+GOAL 3 "Find room 4" DEFEAT "skeleton"
 
 PAGE 0
 "You are in a room, there is a door to the left and a door to the right.
