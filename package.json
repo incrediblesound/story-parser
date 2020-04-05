@@ -1,6 +1,6 @@
 {
   "name": "story-parser",
-  "version": "2.2.5",
+  "version": "2.2.6",
   "description": "A parser for interactive stories.",
   "main": "dist/bundle.js",
   "directories": {

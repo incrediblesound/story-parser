@@ -343,6 +343,9 @@ const processPage = (parserState: ParserState) => {
         reward = { type: 'hidden', name: keyValues.NAME } as HiddenItem
       } else if (keyValues.ITEM === 'health') {
         reward = { type: 'health', recovery: keyValues.RECOVERY, name: keyValues.NAME } as Health
+      } else {
+        parserState.parserError = `Line ${parserState.currentLine}: Unknown ITEM type "${keyValues.ITEM}"`
+        return;
       }
       parserState.nextLine()
       line = parserState.getCurrentLine()
