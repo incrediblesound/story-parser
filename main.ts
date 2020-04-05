@@ -209,12 +209,19 @@ const parser = (rawText: string) => {
         parserState.nextLine()
       } else if (tokens[0].value === 'GOAL') {
         // GOAL 2 "Find room 3" ITEM "sword"
-        parserState.story.goals.push({
-          name: tokens[2].value,
-          index: tokens[1].value,
-          method: tokens[3].value,
-          condition: tokens[4].value,
-        })
+        try {
+          parserState.story.goals.push({
+            name: tokens[2].value,
+            index: tokens[1].value,
+            method: tokens[3].value,
+            condition: tokens[4].value,
+          })
+        } catch(e) {
+          parserState.parserError = (
+            "Line "+parserState.currentLine+": Syntax error in GOAL\n"+
+            "Expected 'GOAL {index:number} {name:string} {method: PAGE | ITEM | DEFEAT} {condition:string}'"
+          )
+        }
         parserState.nextLine()
       } else {
         parserState.parserError = `Line ${parserState.currentLine}: Syntax error`
