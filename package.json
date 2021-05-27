@@ -1,6 +1,6 @@
 {
   "name": "story-parser",
-  "version": "2.2.6",
+  "version": "2.2.7",
   "description": "A parser for interactive stories.",
   "main": "dist/bundle.js",
   "directories": {
@@ -11,7 +11,7 @@
     "build": "webpack"
   },
   "engines": {
-    "node": "8.1.4"
+    "node": "14.4.0"
   },
   "author": "James Edwards",
   "license": "MIT",
